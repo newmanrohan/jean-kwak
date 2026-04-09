@@ -1,28 +1,19 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 import Navigation from '@/components/Navigation'
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-})
+import PageTransition from '@/components/PageTransition'
 
 export const metadata: Metadata = {
   title: 'Jean Kwak Architects',
   description: 'Jean Kwak Architects',
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} h-full`}>
-      <body className="font-[family-name:var(--font-inter)] h-full antialiased">
+    <html lang="en" className="h-full">
+      <body className="h-full">
         <Navigation />
-        {children}
+        <PageTransition>{children}</PageTransition>
       </body>
     </html>
   )

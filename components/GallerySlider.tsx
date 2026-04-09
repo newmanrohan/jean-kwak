@@ -28,19 +28,29 @@ export default function GallerySlider({ images }: GallerySliderProps) {
       <img
         src={url}
         alt={current.caption ?? ''}
-        style={{ width: '100%', display: 'block' }}
+        className="w-full block"
       />
-      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontSize: '12px' }}>
+      <div className="flex justify-between items-center py-2 text-xs text-black/60">
         <span>{current.caption ?? ''}</span>
-        <span>
-          {total > 1 && (
-            <>
-              <button onClick={() => setIndex(i => Math.max(0, i - 1))} disabled={index === 0} style={{ marginRight: 8 }}>←</button>
-              {index + 1} / {total}
-              <button onClick={() => setIndex(i => Math.min(total - 1, i + 1))} disabled={index === total - 1} style={{ marginLeft: 8 }}>→</button>
-            </>
-          )}
-        </span>
+        {total > 1 && (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIndex(i => Math.max(0, i - 1))}
+              disabled={index === 0}
+              className="disabled:opacity-30 cursor-pointer"
+            >
+              ←
+            </button>
+            <span>{index + 1}/{total}</span>
+            <button
+              onClick={() => setIndex(i => Math.min(total - 1, i + 1))}
+              disabled={index === total - 1}
+              className="disabled:opacity-30 cursor-pointer"
+            >
+              →
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -1,13 +1,24 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #000000;
+@font-face {
+  font-family: 'QuadrantText';
+  src: url('/fonts/QuadrantText-Regular.woff2') format('woff2');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+@font-face {
+  font-family: 'QuadrantTextMono';
+  src: url('/fonts/QuadrantTextMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 html,
@@ -16,11 +27,11 @@ body {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-}
-
-/* Swiper custom styles */
-.swiper-slide {
-  overflow: hidden;
+  background: #F7F2E9;
+  color: #2B2B2B;
+  font-family: 'QuadrantText', serif;
+  font-weight: 200;
+  font-size: 18px;
+  line-height: 1.28;
+  -webkit-font-smoothing: antialiased;
 }

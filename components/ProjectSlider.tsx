@@ -1,13 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { urlFor } from '@/lib/sanity'
 
 interface ProjectImage {
-  image: {
-    asset: { _ref: string }
-  }
+  image: { asset: { _ref: string } }
   caption?: string
 }
 
@@ -18,50 +16,150 @@ interface FeaturedProject {
   images: ProjectImage[] | null
 }
 
-interface ProjectSliderProps {
-  projects: FeaturedProject[]
-}
-
-export default function ProjectSlider({ projects }: ProjectSliderProps) {
+export default function ProjectSlider({ projects }: { projects: FeaturedProject[] }) {
   const [index, setIndex] = useState(0)
 
-  if (!projects || projects.length === 0) return null
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft')
+        setIndex(i => (i - 1 + projects.length) % projects.length)
+      if (e.key === 'ArrowRight')
+        setIndex(i => (i + 1) % projects.length)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [projects.length])
 
-  const current = projects[index]
-  const firstImage = current.images?.[0]
+  if (!projects.length) return null
+
+  const project = projects[index]
+  const firstImage = project.images?.[0]
   if (!firstImage) return null
 
-  const url = urlFor(firstImage.image).width(1920).height(1080).fit('crop').url()
-
-  const prev = () => setIndex(i => (i - 1 + projects.length) % projects.length)
-  const next = () => setIndex(i => (i + 1) % projects.length)
+  const url = urlFor(firstImage.image).width(1400).url()
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <img
-        src={url}
-        alt={current.title}
-        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-      />
-      {/* Project name + link */}
-      <div style={{ position: 'absolute', bottom: 32, left: 32, right: 32, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-        <span style={{ color: 'white', fontSize: 14, letterSpacing: '0.05em', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
-          {current.title}
-        </span>
-        <Link
-          href={`/${current.slug}`}
-          style={{ color: 'white', fontSize: 14, letterSpacing: '0.05em', textShadow: '0 1px 3px rgba(0,0,0,0.5)', textDecoration: 'none' }}
-        >
-          View Project
-        </Link>
+    <div
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden',
+        background: '#F7F2E9',
+        userSelect: 'none',
+      }}
+    >
+      {/* Centered image — key forces remount+fadein on project change */}
+      <div
+        key={project._id}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          animation: 'fadein 0.6s ease-in-out',
+        }}
+      >
+        <img
+          src={url}
+          alt={project.title}
+          style={{
+            maxHeight: '63vh',
+            maxWidth: '60%',
+            objectFit: 'cover',
+            display: 'block',
+          }}
+          draggable={false}
+        />
       </div>
-      {/* Arrows */}
+
+      {/* Click zones: left half = prev, right half = next */}
       {projects.length > 1 && (
         <>
-          <button onClick={prev} style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'white', fontSize: 24, cursor: 'pointer' }}>←</button>
-          <button onClick={next} style={{ position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'white', fontSize: 24, cursor: 'pointer' }}>→</button>
+          <div
+            onClick={() => setIndex(i => (i - 1 + projects.length) % projects.length)}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '50%',
+              bottom: '58px',
+              cursor: 'pointer',
+              zIndex: 5,
+            }}
+          />
+          <div
+            onClick={() => setIndex(i => (i + 1) % projects.length)}
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              width: '50%',
+              bottom: '58px',
+              cursor: 'pointer',
+              zIndex: 5,
+            }}
+          />
         </>
       )}
+
+      {/* Bottom bar */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '58px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          paddingLeft: '20px',
+          paddingRight: '20px',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '17px' }}>
+          <span
+            style={{
+              fontFamily: 'QuadrantTextMono',
+              fontWeight: 400,
+              fontSize: '14px',
+              letterSpacing: '0.03em',
+              lineHeight: '1.18',
+              color: '#000',
+              width: '37px',
+              flexShrink: 0,
+            }}
+          >
+            ({index + 1})
+          </span>
+          <Link
+            href={`/${project.slug}`}
+            style={{
+              fontFamily: 'QuadrantText',
+              fontWeight: 200,
+              fontSize: '18px',
+              color: '#000',
+              textDecoration: 'none',
+            }}
+          >
+            {project.title}
+          </Link>
+        </div>
+        <span
+          style={{
+            fontFamily: 'QuadrantTextMono',
+            fontWeight: 400,
+            fontSize: '14px',
+            letterSpacing: '0.03em',
+            lineHeight: '1.18',
+            color: '#000',
+          }}
+        >
+          ({index + 1} / {projects.length})
+        </span>
+      </div>
     </div>
   )
 }

@@ -6,6 +6,12 @@ export const info = defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'portrait',
+      title: 'Portrait',
+      type: 'image',
+      options: { hotspot: true },
+    }),
+    defineField({
       name: 'bio',
       title: 'Bio',
       type: 'array',

@@ -21,7 +21,8 @@ export const allProjectsQuery = groq`
   *[_type == "project"] | order(title asc) {
     _id,
     title,
-    "slug": slug.current
+    "slug": slug.current,
+    "firstImage": images[0].image
   }
 `
 
@@ -58,6 +59,7 @@ export const projectBySlugQuery = groq`
 
 export const infoQuery = groq`
   *[_type == "info"][0] {
+    portrait,
     bio,
     phone,
     email,
@@ -67,5 +69,5 @@ export const infoQuery = groq`
 `
 
 export const allSlugsQuery = groq`
-  *[_type == "project"] { "slug": slug.current }
+  *[_type == "project"] | order(title asc) { "slug": slug.current }
 `
