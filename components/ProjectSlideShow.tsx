@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect, useMemo, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { PortableText } from 'next-sanity'
 import { urlFor } from '@/lib/sanity'
+import { TRANSITION, TRANSITION_MS, TITLE_SLIDE_DELAY_MS } from '@/lib/constants'
+import { useNavigate } from './SiteTransition'
 
 interface ProjectImage {
   image: { asset: { _ref: string } }
@@ -63,8 +64,7 @@ const btnReset: React.CSSProperties = {
 }
 
 export default function ProjectSlideShow({ project, projectNumber }: Props) {
-  const router = useRouter()
-  const [leaving, setLeaving] = useState(false)
+  const navigate = useNavigate()
   const images = useMemo(() => project.images ?? [], [project.images])
 
   const slides = useMemo<Slide[]>(
@@ -78,6 +78,25 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
 
   const [slideIndex, setSlideIndex] = useState(0)
   const [lastImageIdx, setLastImageIdx] = useState(0)
+  const [slideOpacity, setSlideOpacity] = useState(1)
+  const isTransitioning = useRef(false)
+  const slideIndexRef = useRef(0)
+
+  useEffect(() => { slideIndexRef.current = slideIndex }, [slideIndex])
+
+  // All slides are always mounted. The incoming slide is already at opacity 0
+  // before navigation, so setSlideIndex + setSlideOpacity(1) in the same
+  // setTimeout batch triggers the CSS transition immediately — no rAF needed.
+  const goToSlide = useCallback((newIndex: number) => {
+    if (isTransitioning.current) return
+    isTransitioning.current = true
+    setSlideOpacity(0)
+    setTimeout(() => {
+      setSlideIndex(newIndex)
+      setSlideOpacity(1)
+      isTransitioning.current = false
+    }, TRANSITION_MS)
+  }, [])
 
   const currentSlide = slides[slideIndex]
 
@@ -88,42 +107,35 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
     }
   }, [currentSlide])
 
-  // Auto-advance from title slide to first image after 3 s
+  // Auto-advance from title slide to first image after delay
   useEffect(() => {
     if (slideIndex !== 0) return
-    const timer = setTimeout(() => setSlideIndex(1), 3000)
+    const timer = setTimeout(() => goToSlide(1), TITLE_SLIDE_DELAY_MS)
     return () => clearTimeout(timer)
-  }, [slideIndex])
+  }, [slideIndex, goToSlide])
 
   // Arrow key navigation with wrap-around
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft')
-        setSlideIndex(i => (i - 1 + slides.length) % slides.length)
+        goToSlide((slideIndexRef.current - 1 + slides.length) % slides.length)
       if (e.key === 'ArrowRight')
-        setSlideIndex(i => (i + 1) % slides.length)
+        goToSlide((slideIndexRef.current + 1) % slides.length)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [slides.length])
+  }, [slides.length, goToSlide])
 
-  const handleClose = useCallback(() => {
-    if (leaving) return
-    setLeaving(true)
-    setTimeout(() => router.push('/project-index'), 600)
-  }, [leaving, router])
-
-  const goToInfo = () => setSlideIndex(slides.length - 1)
+  const goToInfo = () => goToSlide(slides.length - 1)
 
   const goToLastImage = () => {
     for (let i = slides.length - 1; i >= 0; i--) {
-      if (slides[i].type === 'image') { setSlideIndex(i); return }
+      if (slides[i].type === 'image') { goToSlide(i); return }
     }
-    setSlideIndex(0)
+    goToSlide(0)
   }
 
   const isTitle = currentSlide.type === 'title'
-  const isImage = currentSlide.type === 'image'
   const isInfo  = currentSlide.type === 'info'
 
   const infoFields = [
@@ -135,6 +147,18 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
     { label: '(Styling)',     value: project.styling },
   ].filter(f => f.value)
 
+  // Returns opacity/transition/pointerEvents for a given slide index.
+  // All slides are always mounted; non-active slides sit at opacity 0.
+  const slideStyle = (idx: number): React.CSSProperties => ({
+    position: 'absolute',
+    inset: 0,
+    opacity: slideIndex === idx ? slideOpacity : 0,
+    transition: `opacity ${TRANSITION}`,
+    pointerEvents: slideIndex === idx ? 'auto' : 'none',
+  })
+
+  const infoIdx = slides.length - 1
+
   return (
     <div
       style={{
@@ -143,8 +167,7 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
         background: isTitle ? '#E8D9C4' : '#F7F2E9',
         overflow: 'hidden',
         userSelect: 'none',
-        opacity: leaving ? 0 : 1,
-        transition: 'opacity 0.6s ease-in-out, background 0.6s ease-in-out',
+        transition: `background ${TRANSITION}`,
       }}
     >
       {/* ── TOP BAR ── */}
@@ -161,7 +184,6 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
           zIndex: 10,
         }}
       >
-        {/* Left: (N) Title */}
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '17px', flex: 1 }}>
           <span style={{ ...mono, color: '#2B2B2B', width: '37px', flexShrink: 0 }}>
             ({projectNumber})
@@ -170,8 +192,6 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
             {project.title}
           </span>
         </div>
-
-        {/* Center: Show information / Back to images */}
         <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
           {isInfo ? (
             <button onClick={goToLastImage} style={{ ...serif, ...btnReset, color: '#000' }}>
@@ -183,11 +203,9 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
             </button>
           )}
         </div>
-
-        {/* Right: Close → /project-index */}
         <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
           <button
-            onClick={handleClose}
+            onClick={() => navigate('/project-index')}
             style={{ ...serif, ...btnReset, color: '#2B2B2B' }}
           >
             Close
@@ -195,9 +213,9 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
         </div>
       </div>
 
-      {/* ── CLICK ZONES (left = prev, right = next, wrap-around) ── */}
+      {/* ── CLICK ZONES ── */}
       <div
-        onClick={() => setSlideIndex(i => (i - 1 + slides.length) % slides.length)}
+        onClick={() => goToSlide((slideIndex - 1 + slides.length) % slides.length)}
         style={{
           position: 'absolute',
           top: '58px', left: 0,
@@ -208,7 +226,7 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
         }}
       />
       <div
-        onClick={() => setSlideIndex(i => (i + 1) % slides.length)}
+        onClick={() => goToSlide((slideIndex + 1) % slides.length)}
         style={{
           position: 'absolute',
           top: '58px', right: 0,
@@ -219,17 +237,15 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
         }}
       />
 
-      {/* ── TITLE SLIDE ── */}
-      {isTitle && (
+      {/* ── TITLE SLIDE ── always mounted, visible only when active */}
+      <div style={slideStyle(0)}>
         <div
-          key="title"
           style={{
             position: 'absolute',
             inset: 0,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            animation: 'fadein 0.6s ease-in-out',
           }}
         >
           <h1
@@ -247,26 +263,21 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
             {project.title}
           </h1>
         </div>
-      )}
+      </div>
 
-      {/* ── IMAGE SLIDE ── */}
-      {isImage && (() => {
-        const slide = currentSlide as { type: 'image'; imgIndex: number }
-        const img = images[slide.imgIndex]
-        if (!img) return null
+      {/* ── IMAGE SLIDES ── all mounted; each waits at opacity 0 until active */}
+      {images.map((img, i) => {
         const url = urlFor(img.image).width(1400).url()
+        const idx = i + 1
         return (
-          <>
-            {/* Image fades in on each slide change */}
+          <div key={i} style={slideStyle(idx)}>
             <div
-              key={slide.imgIndex}
               style={{
                 position: 'absolute',
                 inset: 0,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                animation: 'fadein 0.6s ease-in-out',
               }}
             >
               <img
@@ -281,8 +292,6 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
                 draggable={false}
               />
             </div>
-
-            {/* Bottom bar */}
             <div
               style={{
                 position: 'absolute',
@@ -293,118 +302,99 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
                 justifyContent: 'space-between',
                 paddingLeft: '20px',
                 paddingRight: '20px',
-                zIndex: 10,
               }}
             >
               <span style={{ ...serif, color: '#000' }}>{img.caption ?? ''}</span>
               <span style={{ ...mono, color: '#000' }}>
-                ({slide.imgIndex + 1} / {images.length})
+                ({i + 1} / {images.length})
               </span>
             </div>
-          </>
+          </div>
         )
-      })()}
+      })}
 
-      {/* ── INFO SLIDE ── */}
-      {isInfo && (
-        <>
-          {/*
-            Scrollable content area between the two bars.
-            Responsive: stacks on mobile, two-column on desktop.
-            Desktop mirrors the information page layout:
-              [metadata ~24%] [gap ~37%] [description flex-1]
-          */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '58px',
-              bottom: '58px',
-              left: 0,
-              right: 0,
-              overflowY: 'auto',
-              animation: 'fadein 0.6s ease-in-out',
-            }}
-          >
-            <div className="flex flex-col lg:flex-row px-5 py-8">
-
-              {/* Left: metadata labels + values (~24%) */}
-              {infoFields.length > 0 && (
-                <div className="shrink-0 mb-8 lg:mb-0 lg:w-[24%]">
-                  <div style={{ display: 'flex', gap: '16px' }}>
-                    <div style={{ ...monoLabel, color: '#000' }}>
-                      {infoFields.map(f => f.label).join('\n')}
-                    </div>
-                    <div style={{ ...monoLabel, color: '#000' }}>
-                      {infoFields.map(f => f.value!).join('\n')}
-                    </div>
+      {/* ── INFO SLIDE ── always mounted, visible only when active */}
+      <div style={slideStyle(infoIdx)}>
+        <div
+          style={{
+            position: 'absolute',
+            top: '58px',
+            bottom: '58px',
+            left: 0,
+            right: 0,
+            overflowY: 'auto',
+          }}
+        >
+          <div className="flex flex-col lg:flex-row px-5 py-8">
+            {infoFields.length > 0 && (
+              <div className="shrink-0 mb-8 lg:mb-0 lg:w-[24%]">
+                <div style={{ display: 'flex', gap: '16px' }}>
+                  <div style={{ ...monoLabel, color: '#000' }}>
+                    {infoFields.map(f => f.label).join('\n')}
+                  </div>
+                  <div style={{ ...monoLabel, color: '#000' }}>
+                    {infoFields.map(f => f.value!).join('\n')}
                   </div>
                 </div>
-              )}
-
-              {/* Gap — desktop only (~27%) */}
-              <div className="hidden lg:block shrink-0 lg:w-[27%]" />
-
-              {/* Right: (about) label LEFT of description */}
-              <div className="flex-1 min-w-0 flex flex-col lg:flex-row">
+              </div>
+            )}
+            <div className="hidden lg:block shrink-0 lg:w-[27%]" />
+            <div className="flex-1 min-w-0 flex flex-col lg:flex-row">
+              <div
+                className="shrink-0 mb-4 lg:mb-0 lg:w-[22%]"
+                style={{ ...monoLabel, color: '#000' }}
+              >
+                (about)
+              </div>
+              <div className="flex-1 min-w-0">
                 <div
-                  className="shrink-0 mb-4 lg:mb-0 lg:w-[22%]"
-                  style={{ ...monoLabel, color: '#000' }}
+                  style={{
+                    fontFamily: 'QuadrantText',
+                    fontWeight: 200,
+                    fontSize: '18px',
+                    lineHeight: '1.278',
+                    color: '#141414',
+                  }}
                 >
-                  (about)
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div
-                    style={{
-                      fontFamily: 'QuadrantText',
-                      fontWeight: 200,
-                      fontSize: '18px',
-                      lineHeight: '1.278',
-                      color: '#141414',
-                    }}
-                  >
-                    {project.description && project.description.length > 0 && (
-                      <PortableText
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        value={project.description as any}
-                        components={{
-                          block: {
-                            normal: ({ children }) => (
-                              <p style={{ margin: 0, marginBottom: '1.2em' }}>{children}</p>
-                            ),
-                          },
-                        }}
-                      />
-                    )}
-                  </div>
+                  {project.description && project.description.length > 0 && (
+                    <PortableText
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      value={project.description as any}
+                      components={{
+                        block: {
+                          normal: ({ children }) => (
+                            <p style={{ margin: 0, marginBottom: '1.2em' }}>{children}</p>
+                          ),
+                        },
+                      }}
+                    />
+                  )}
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Bottom bar */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: 0, left: 0, right: 0,
-              height: '58px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              paddingLeft: '20px',
-              paddingRight: '20px',
-              zIndex: 10,
-              background: '#F7F2E9',
-            }}
-          >
-            <span style={{ ...serif, color: '#000' }}>Project information</span>
-            {images.length > 0 && (
-              <span style={{ ...mono, color: '#000' }}>
-                ({lastImageIdx + 1} / {images.length})
-              </span>
-            )}
-          </div>
-        </>
-      )}
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0, left: 0, right: 0,
+            height: '58px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingLeft: '20px',
+            paddingRight: '20px',
+            background: '#F7F2E9',
+          }}
+        >
+          <span style={{ ...serif, color: '#000' }}>Project information</span>
+          {images.length > 0 && (
+            <span style={{ ...mono, color: '#000' }}>
+              ({lastImageIdx + 1} / {images.length})
+            </span>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

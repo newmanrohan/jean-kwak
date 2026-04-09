@@ -1,7 +1,8 @@
 'use client'
 
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { TRANSITION } from '@/lib/constants'
+import TransitionLink from './TransitionLink'
 
 const KNOWN_ROUTES = new Set(['/', '/project-index', '/information'])
 
@@ -26,7 +27,7 @@ export default function Navigation() {
         height: '58px',
       }}
     >
-      <Link
+      <TransitionLink
         href="/"
         style={{
           fontFamily: 'QuadrantText',
@@ -38,9 +39,9 @@ export default function Navigation() {
         }}
       >
         Jean Kwak Architects
-      </Link>
+      </TransitionLink>
       <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-        <Link
+        <TransitionLink
           href="/project-index"
           style={{
             fontFamily: 'QuadrantText',
@@ -50,13 +51,13 @@ export default function Navigation() {
             textAlign: 'right',
             textDecoration: 'none',
             color: '#141414',
-            transition: 'opacity 0.6s ease-in-out',
+            transition: `opacity ${TRANSITION}`,
             opacity: pathname === '/information' ? 0.45 : 1,
           }}
         >
           Project Index,
-        </Link>
-        <Link
+        </TransitionLink>
+        <TransitionLink
           href="/information"
           style={{
             fontFamily: 'QuadrantText',
@@ -66,12 +67,12 @@ export default function Navigation() {
             textAlign: 'right',
             textDecoration: 'none',
             color: '#141414',
-            transition: 'opacity 0.6s ease-in-out',
+            transition: `opacity ${TRANSITION}`,
             opacity: pathname === '/project-index' ? 0.45 : 1,
           }}
         >
           Information
-        </Link>
+        </TransitionLink>
       </div>
     </nav>
   )

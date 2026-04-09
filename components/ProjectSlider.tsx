@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { urlFor } from '@/lib/sanity'
+import { TRANSITION, TRANSITION_MS } from '@/lib/constants'
+import TransitionLink from './TransitionLink'
 
 interface ProjectImage {
   image: { asset: { _ref: string } }
@@ -18,25 +19,40 @@ interface FeaturedProject {
 
 export default function ProjectSlider({ projects }: { projects: FeaturedProject[] }) {
   const [index, setIndex] = useState(0)
+  const [opacity, setOpacity] = useState(1)
+  const isTransitioning = useRef(false)
+  const indexRef = useRef(0)
+
+  useEffect(() => { indexRef.current = index }, [index])
+
+  // All project images are always mounted at opacity 0.
+  // setIndex + setOpacity(1) in the same setTimeout batch triggers the
+  // CSS transition immediately — no rAF needed.
+  const goToIndex = useCallback((newIndex: number) => {
+    if (isTransitioning.current) return
+    isTransitioning.current = true
+    setOpacity(0)
+    setTimeout(() => {
+      setIndex(newIndex)
+      setOpacity(1)
+      isTransitioning.current = false
+    }, TRANSITION_MS)
+  }, [])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft')
-        setIndex(i => (i - 1 + projects.length) % projects.length)
+        goToIndex((indexRef.current - 1 + projects.length) % projects.length)
       if (e.key === 'ArrowRight')
-        setIndex(i => (i + 1) % projects.length)
+        goToIndex((indexRef.current + 1) % projects.length)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [projects.length])
+  }, [projects.length, goToIndex])
 
   if (!projects.length) return null
 
   const project = projects[index]
-  const firstImage = project.images?.[0]
-  if (!firstImage) return null
-
-  const url = urlFor(firstImage.image).width(1400).url()
 
   return (
     <div
@@ -49,36 +65,45 @@ export default function ProjectSlider({ projects }: { projects: FeaturedProject[
         userSelect: 'none',
       }}
     >
-      {/* Centered image — key forces remount+fadein on project change */}
-      <div
-        key={project._id}
-        style={{
-          position: 'absolute',
-          inset: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          animation: 'fadein 0.6s ease-in-out',
-        }}
-      >
-        <img
-          src={url}
-          alt={project.title}
-          style={{
-            maxHeight: '63vh',
-            maxWidth: '60%',
-            objectFit: 'cover',
-            display: 'block',
-          }}
-          draggable={false}
-        />
-      </div>
+      {/* All project images always mounted — incoming sits at opacity 0 until active */}
+      {projects.map((proj, i) => {
+        const firstImage = proj.images?.[0]
+        if (!firstImage) return null
+        const url = urlFor(firstImage.image).width(1400).url()
+        return (
+          <div
+            key={proj._id}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              opacity: index === i ? opacity : 0,
+              transition: `opacity ${TRANSITION}`,
+              pointerEvents: index === i ? 'auto' : 'none',
+            }}
+          >
+            <img
+              src={url}
+              alt={proj.title}
+              style={{
+                maxHeight: '63vh',
+                maxWidth: '60%',
+                objectFit: 'cover',
+                display: 'block',
+              }}
+              draggable={false}
+            />
+          </div>
+        )
+      })}
 
       {/* Click zones: left half = prev, right half = next */}
       {projects.length > 1 && (
         <>
           <div
-            onClick={() => setIndex(i => (i - 1 + projects.length) % projects.length)}
+            onClick={() => goToIndex((index - 1 + projects.length) % projects.length)}
             style={{
               position: 'absolute',
               top: 0,
@@ -90,7 +115,7 @@ export default function ProjectSlider({ projects }: { projects: FeaturedProject[
             }}
           />
           <div
-            onClick={() => setIndex(i => (i + 1) % projects.length)}
+            onClick={() => goToIndex((index + 1) % projects.length)}
             style={{
               position: 'absolute',
               top: 0,
@@ -117,6 +142,7 @@ export default function ProjectSlider({ projects }: { projects: FeaturedProject[
           justifyContent: 'space-between',
           paddingLeft: '20px',
           paddingRight: '20px',
+          zIndex: 10,
         }}
       >
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '17px' }}>
@@ -134,7 +160,7 @@ export default function ProjectSlider({ projects }: { projects: FeaturedProject[
           >
             ({index + 1})
           </span>
-          <Link
+          <TransitionLink
             href={`/${project.slug}`}
             style={{
               fontFamily: 'QuadrantText',
@@ -145,7 +171,7 @@ export default function ProjectSlider({ projects }: { projects: FeaturedProject[
             }}
           >
             {project.title}
-          </Link>
+          </TransitionLink>
         </div>
         <span
           style={{

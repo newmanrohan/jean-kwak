@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+:root {
+  --transition: 500ms ease-in-out;
+}
+
 @font-face {
   font-family: 'QuadrantText';
   src: url('/fonts/QuadrantText-Regular.woff2') format('woff2');

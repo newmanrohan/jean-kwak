@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import Link from 'next/link'
 import { urlFor } from '@/lib/sanity'
+import { TRANSITION } from '@/lib/constants'
+import TransitionLink from './TransitionLink'
 
 interface Project {
   _id: string
@@ -43,7 +44,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
           right: '20px',
           width: '294px',
           opacity: hovered !== null ? 1 : 0,
-          transition: 'opacity 0.6s ease-in-out',
+          transition: `opacity ${TRANSITION}`,
           pointerEvents: 'none',
           zIndex: 30,
         }}
@@ -92,7 +93,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
               alignItems: 'baseline',
               gap: '17px',
               opacity: hovered !== null && hovered !== i ? 0.5 : 1,
-              transition: 'opacity 0.6s ease-in-out',
+              transition: `opacity ${TRANSITION}`,
             }}
             onMouseEnter={() => handleMouseEnter(i)}
             onMouseLeave={handleMouseLeave}
@@ -111,7 +112,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
             >
               ({i + 1})
             </span>
-            <Link
+            <TransitionLink
               href={`/${project.slug}`}
               style={{
                 fontFamily: 'QuadrantText',
@@ -125,7 +126,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
               }}
             >
               {project.title}
-            </Link>
+            </TransitionLink>
           </div>
         ))}
       </div>
