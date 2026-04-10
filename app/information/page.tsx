@@ -115,13 +115,11 @@ export default async function InformationPage() {
                   (contact)
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div style={{ display: 'flex', gap: '24px' }}>
-                    {/* Labels */}
-                    <div style={{ ...mono, flexShrink: 0 }}>
+                  <div className="grid grid-cols-[144px_1fr] gap-x-8">
+                    <div style={mono}>
                       {contactRows.map(r => r.label).join('\n')}
                     </div>
-                    {/* Values */}
-                    <div style={{ ...mono }}>
+                    <div style={mono}>
                       {contactRows.map(r => r.value).join('\n')}
                     </div>
                   </div>
@@ -130,7 +128,7 @@ export default async function InformationPage() {
             )}
 
             {/* Footer */}
-            <div style={{ ...mono, marginTop: '48px' }}>
+            <div className="lg:ml-[22%]" style={{ ...mono, marginTop: '48px' }}>
               {'ACT Architects Registration No 2752\nJean Architects © All rights reserved 2023'}
             </div>
           </div>

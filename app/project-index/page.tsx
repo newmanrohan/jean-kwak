@@ -11,7 +11,7 @@ export default async function ProjectIndexPage() {
       style={{
         background: '#F7F2E9',
         minHeight: '100vh',
-        paddingTop: '144px',
+        paddingTop: '157px',
         paddingBottom: '64px',
       }}
     >

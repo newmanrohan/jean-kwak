@@ -67,7 +67,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
       <div
         style={{
           position: 'fixed',
-          top: '158px',
+          top: '157px',
           left: '20px',
           width: '144px',
           fontFamily: 'QuadrantTextMono',

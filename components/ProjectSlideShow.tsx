@@ -178,39 +178,22 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
           height: '58px',
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'space-between',
           paddingLeft: '20px',
           paddingRight: '20px',
           paddingTop: '7px',
           zIndex: 10,
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '17px', flex: 1 }}>
-          <span style={{ ...mono, color: '#2B2B2B', width: '37px', flexShrink: 0 }}>
-            ({projectNumber})
-          </span>
-          <span style={{ ...serif, color: '#2B2B2B' }}>
-            {project.title}
-          </span>
-        </div>
-        <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-          {isInfo ? (
-            <button onClick={goToLastImage} style={{ ...serif, ...btnReset, color: '#000' }}>
-              Back to images
-            </button>
-          ) : (
-            <button onClick={goToInfo} style={{ ...serif, ...btnReset, color: '#000' }}>
-              Show information
-            </button>
-          )}
-        </div>
-        <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-          <button
-            onClick={() => navigate('/project-index')}
-            style={{ ...serif, ...btnReset, color: '#2B2B2B' }}
-          >
-            Close
-          </button>
-        </div>
+        <span style={{ ...serif, color: '#2B2B2B' }}>
+          {project.title}
+        </span>
+        <button
+          onClick={() => navigate('/project-index')}
+          style={{ ...serif, ...btnReset, color: '#2B2B2B' }}
+        >
+          (Close)
+        </button>
       </div>
 
       {/* ── CLICK ZONES ── */}
@@ -220,7 +203,7 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
           position: 'absolute',
           top: '58px', left: 0,
           width: '50%',
-          bottom: isInfo ? 0 : '58px',
+          bottom: '58px',
           cursor: 'pointer',
           zIndex: 5,
         }}
@@ -231,7 +214,7 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
           position: 'absolute',
           top: '58px', right: 0,
           width: '50%',
-          bottom: isInfo ? 0 : '58px',
+          bottom: '58px',
           cursor: 'pointer',
           zIndex: 5,
         }}
@@ -304,10 +287,13 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
                 paddingRight: '20px',
               }}
             >
-              <span style={{ ...serif, color: '#000' }}>{img.caption ?? ''}</span>
-              <span style={{ ...mono, color: '#000' }}>
-                ({i + 1} / {images.length})
-              </span>
+              <div style={{ display: 'flex', alignItems: 'baseline' }}>
+                <span style={{ ...mono, color: '#000' }}>{i + 1} / {images.length}</span>
+                <span style={{ ...serif, color: '#000', marginLeft: '80px' }}>{img.caption ?? ''}</span>
+              </div>
+              <button onClick={goToInfo} style={{ ...serif, ...btnReset, color: '#000' }}>
+                (Read more)
+              </button>
             </div>
           </div>
         )
@@ -325,10 +311,10 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
             overflowY: 'auto',
           }}
         >
-          <div className="flex flex-col lg:flex-row px-5 py-8">
+          <div className="flex flex-col lg:flex-row px-5 pb-8 pt-[99px]">
             {infoFields.length > 0 && (
               <div className="shrink-0 mb-8 lg:mb-0 lg:w-[24%]">
-                <div style={{ display: 'flex', gap: '16px' }}>
+                <div className="grid grid-cols-[144px_1fr] gap-x-8">
                   <div style={{ ...monoLabel, color: '#000' }}>
                     {infoFields.map(f => f.label).join('\n')}
                   </div>
@@ -381,18 +367,21 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
             height: '58px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
             paddingLeft: '20px',
             paddingRight: '20px',
+            justifyContent: 'space-between',
             background: '#F7F2E9',
           }}
         >
-          <span style={{ ...serif, color: '#000' }}>Project information</span>
-          {images.length > 0 && (
-            <span style={{ ...mono, color: '#000' }}>
-              ({lastImageIdx + 1} / {images.length})
-            </span>
-          )}
+          <div style={{ display: 'flex', alignItems: 'baseline' }}>
+            {images.length > 0 && (
+              <span style={{ ...mono, color: '#000' }}>{lastImageIdx + 1} / {images.length}</span>
+            )}
+            <span style={{ ...serif, color: '#000', marginLeft: '80px' }}>Project information</span>
+          </div>
+          <button onClick={goToLastImage} style={{ ...serif, ...btnReset, color: '#000' }}>
+            (Back to images)
+          </button>
         </div>
       </div>
     </div>

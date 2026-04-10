@@ -145,7 +145,7 @@ export default function ProjectSlider({ projects }: { projects: FeaturedProject[
           zIndex: 10,
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '17px' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline' }}>
           <span
             style={{
               fontFamily: 'QuadrantTextMono',
@@ -154,37 +154,34 @@ export default function ProjectSlider({ projects }: { projects: FeaturedProject[
               letterSpacing: '0.03em',
               lineHeight: '1.18',
               color: '#000',
-              width: '37px',
-              flexShrink: 0,
             }}
           >
-            ({index + 1})
+            {index + 1} / {projects.length}
           </span>
-          <TransitionLink
-            href={`/${project.slug}`}
+          <span
             style={{
               fontFamily: 'QuadrantText',
               fontWeight: 200,
               fontSize: '18px',
               color: '#000',
-              textDecoration: 'none',
+              marginLeft: '80px',
             }}
           >
             {project.title}
-          </TransitionLink>
+          </span>
         </div>
-        <span
+        <TransitionLink
+          href={`/${project.slug}`}
           style={{
-            fontFamily: 'QuadrantTextMono',
-            fontWeight: 400,
-            fontSize: '14px',
-            letterSpacing: '0.03em',
-            lineHeight: '1.18',
+            fontFamily: 'QuadrantText',
+            fontWeight: 200,
+            fontSize: '18px',
             color: '#000',
+            textDecoration: 'none',
           }}
         >
-          ({index + 1} / {projects.length})
-        </span>
+          (View Project)
+        </TransitionLink>
       </div>
     </div>
   )
