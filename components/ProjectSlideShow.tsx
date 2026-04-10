@@ -282,18 +282,11 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
                 height: '58px',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
                 paddingLeft: '20px',
-                paddingRight: '20px',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'baseline' }}>
-                <span style={{ ...mono, color: '#000' }}>{i + 1} / {images.length}</span>
-                <span style={{ ...serif, color: '#000', marginLeft: '80px' }}>{img.caption ?? ''}</span>
-              </div>
-              <button onClick={goToInfo} style={{ ...serif, ...btnReset, color: '#000' }}>
-                (Read more)
-              </button>
+              <span style={{ ...mono, color: '#000', width: '24px', flexShrink: 0 }}>{i + 1}</span>
+              <span style={{ ...serif, color: '#000', marginLeft: '80px' }}>{img.caption ?? ''}</span>
             </div>
           </div>
         )
@@ -368,22 +361,44 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
             display: 'flex',
             alignItems: 'center',
             paddingLeft: '20px',
-            paddingRight: '20px',
-            justifyContent: 'space-between',
-            background: '#F7F2E9',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'baseline' }}>
-            {images.length > 0 && (
-              <span style={{ ...mono, color: '#000' }}>{lastImageIdx + 1} / {images.length}</span>
-            )}
-            <span style={{ ...serif, color: '#000', marginLeft: '80px' }}>Project information</span>
-          </div>
-          <button onClick={goToLastImage} style={{ ...serif, ...btnReset, color: '#000' }}>
-            (Back to images)
-          </button>
+          {images.length > 0 && (
+            <span style={{ ...mono, color: '#000', width: '24px', flexShrink: 0 }}>{lastImageIdx + 1}</span>
+          )}
+          <span style={{ ...serif, color: '#000', marginLeft: '80px' }}>Project information</span>
         </div>
       </div>
+
+      {/* ── PERSISTENT BOTTOM BAR ── outside opacity wrappers; hidden on title slide */}
+      {!isTitle && (
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0, left: 0, right: 0,
+            height: '58px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingLeft: '44px',
+            paddingRight: '20px',
+            zIndex: 10,
+          }}
+        >
+          {images.length > 0 && (
+            <span style={{ ...mono, color: '#000' }}>/ {images.length}</span>
+          )}
+          {isInfo ? (
+            <button onClick={goToLastImage} style={{ ...serif, ...btnReset, color: '#000' }}>
+              (Back to images)
+            </button>
+          ) : (
+            <button onClick={goToInfo} style={{ ...serif, ...btnReset, color: '#000' }}>
+              (Read more)
+            </button>
+          )}
+        </div>
+      )}
     </div>
   )
 }
