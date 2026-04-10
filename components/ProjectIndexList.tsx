@@ -24,7 +24,6 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
     setHovered(i)
     const el = rowRefs.current[i]
     if (el) {
-      // Align image top to the top of this row in the viewport
       setImageTop(el.getBoundingClientRect().top)
     }
     if (projects[i]?.firstImage) {
@@ -36,8 +35,9 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
 
   return (
     <div>
-      {/* Preview image — always in DOM; opacity animates on hover */}
+      {/* Desktop: preview image on hover */}
       <div
+        className="hidden lg:block"
         style={{
           position: 'fixed',
           top: imageTop,
@@ -63,13 +63,12 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
         )}
       </div>
 
-      {/* (index) label — fixed below nav on left */}
+      {/* (index) label — fixed below nav */}
       <div
         style={{
           position: 'fixed',
           top: '157px',
           left: '20px',
-          width: '144px',
           fontFamily: 'QuadrantTextMono',
           fontWeight: 400,
           fontSize: 'var(--font-label)',
@@ -82,8 +81,48 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
         (index)
       </div>
 
-      {/* Project rows */}
-      <div style={{ marginLeft: '196px' }}>
+      {/* Mobile: 2-column image grid */}
+      <div
+        className="lg:hidden grid"
+        style={{
+          paddingLeft: '20px',
+          paddingRight: '20px',
+          paddingTop: '32px',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '15px',
+        }}
+      >
+        {projects.map((project) => (
+          <TransitionLink
+            key={project._id}
+            href={`/${project.slug}`}
+            style={{ textDecoration: 'none' }}
+          >
+            {project.firstImage && (
+              <img
+                src={urlFor(project.firstImage).width(600).url()}
+                alt={project.title}
+                style={{ width: '100%', display: 'block' }}
+              />
+            )}
+            <div
+              style={{
+                fontFamily: 'QuadrantText',
+                fontWeight: 200,
+                fontSize: 'var(--font-body)',
+                color: '#2B2B2B',
+                lineHeight: '1.3',
+                marginTop: '8px',
+              }}
+            >
+              {project.title}
+            </div>
+          </TransitionLink>
+        ))}
+      </div>
+
+      {/* Desktop: list with hover interaction */}
+      <div className="hidden lg:block" style={{ marginLeft: '196px' }}>
         {projects.map((project, i) => (
           <div
             key={project._id}
