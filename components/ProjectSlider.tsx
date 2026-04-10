@@ -89,7 +89,7 @@ export default function ProjectSlider({ projects }: { projects: FeaturedProject[
               alt={proj.title}
               style={{
                 maxHeight: '63vh',
-                maxWidth: '60%',
+                maxWidth: 'max(60vw, min(614px, calc(100vw - 40px)))',
                 objectFit: 'cover',
                 display: 'block',
               }}
@@ -150,7 +150,7 @@ export default function ProjectSlider({ projects }: { projects: FeaturedProject[
             style={{
               fontFamily: 'QuadrantTextMono',
               fontWeight: 400,
-              fontSize: '14px',
+              fontSize: 'var(--font-label)',
               letterSpacing: '0.03em',
               lineHeight: '1.18',
               color: '#000',
@@ -162,7 +162,7 @@ export default function ProjectSlider({ projects }: { projects: FeaturedProject[
             style={{
               fontFamily: 'QuadrantText',
               fontWeight: 200,
-              fontSize: '18px',
+              fontSize: 'var(--font-body)',
               color: '#000',
               marginLeft: '80px',
             }}
@@ -175,7 +175,7 @@ export default function ProjectSlider({ projects }: { projects: FeaturedProject[
           style={{
             fontFamily: 'QuadrantText',
             fontWeight: 200,
-            fontSize: '18px',
+            fontSize: 'var(--font-body)',
             color: '#000',
             textDecoration: 'none',
           }}

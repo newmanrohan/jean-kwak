@@ -38,14 +38,14 @@ type Slide =
 const serif: React.CSSProperties = {
   fontFamily: 'QuadrantText',
   fontWeight: 200,
-  fontSize: '18px',
+  fontSize: 'var(--font-body)',
   lineHeight: '2.26em',
 }
 
 const mono: React.CSSProperties = {
   fontFamily: 'QuadrantTextMono',
   fontWeight: 400,
-  fontSize: '14px',
+  fontSize: 'var(--font-label)',
   letterSpacing: '0.03em',
   lineHeight: '1.18',
 }
@@ -268,7 +268,7 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
                 alt={img.caption ?? ''}
                 style={{
                   maxHeight: '63vh',
-                  maxWidth: '60%',
+                  maxWidth: 'max(60vw, min(614px, calc(100vw - 40px)))',
                   objectFit: 'cover',
                   display: 'block',
                 }}
@@ -330,7 +330,7 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
                   style={{
                     fontFamily: 'QuadrantText',
                     fontWeight: 200,
-                    fontSize: '18px',
+                    fontSize: 'var(--font-body)',
                     lineHeight: '1.278',
                     color: '#141414',
                   }}

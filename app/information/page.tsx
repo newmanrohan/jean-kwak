@@ -15,7 +15,7 @@ interface Info {
 const mono: React.CSSProperties = {
   fontFamily: 'QuadrantTextMono',
   fontWeight: 400,
-  fontSize: '14px',
+  fontSize: 'var(--font-label)',
   letterSpacing: '0.03em',
   textTransform: 'uppercase',
   lineHeight: '1.18',
@@ -84,7 +84,7 @@ export default async function InformationPage() {
                   style={{
                     fontFamily: 'QuadrantText',
                     fontWeight: 200,
-                    fontSize: '18px',
+                    fontSize: 'var(--font-body)',
                     lineHeight: '1.278',
                     color: '#141414',
                   }}

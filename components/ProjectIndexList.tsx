@@ -72,7 +72,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
           width: '144px',
           fontFamily: 'QuadrantTextMono',
           fontWeight: 400,
-          fontSize: '14px',
+          fontSize: 'var(--font-label)',
           letterSpacing: '0.03em',
           textTransform: 'uppercase',
           lineHeight: '1.18',
@@ -102,7 +102,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
               style={{
                 fontFamily: 'QuadrantTextMono',
                 fontWeight: 400,
-                fontSize: '14px',
+                fontSize: 'var(--font-label)',
                 letterSpacing: '0.03em',
                 lineHeight: '1.18',
                 color: '#2B2B2B',
@@ -117,7 +117,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
               style={{
                 fontFamily: 'QuadrantText',
                 fontWeight: 200,
-                fontSize: '18px',
+                fontSize: 'var(--font-body)',
                 color: '#2B2B2B',
                 lineHeight: '1.4',
                 textDecoration: 'none',

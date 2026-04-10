@@ -32,7 +32,7 @@ export default function Navigation() {
         style={{
           fontFamily: 'QuadrantText',
           fontWeight: 200,
-          fontSize: '18px',
+          fontSize: 'var(--font-body)',
           lineHeight: '2.26em',
           color: '#2B2B2B',
           textDecoration: 'none',
@@ -46,7 +46,7 @@ export default function Navigation() {
           style={{
             fontFamily: 'QuadrantText',
             fontWeight: 200,
-            fontSize: '18px',
+            fontSize: 'var(--font-body)',
             lineHeight: '2.26em',
             textAlign: 'right',
             textDecoration: 'none',
@@ -62,7 +62,7 @@ export default function Navigation() {
           style={{
             fontFamily: 'QuadrantText',
             fontWeight: 200,
-            fontSize: '18px',
+            fontSize: 'var(--font-body)',
             lineHeight: '2.26em',
             textAlign: 'right',
             textDecoration: 'none',
