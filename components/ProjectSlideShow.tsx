@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { PortableText } from 'next-sanity'
 import { urlFor } from '@/lib/sanity'
 import { TRANSITION, TRANSITION_MS, TITLE_SLIDE_DELAY_MS } from '@/lib/constants'
+import { slideBarCaptionStyle, slideBarCounterStyle } from '@/lib/slideBottomBarStyles'
 import { useNavigate } from './SiteTransition'
 
 interface ProjectImage {
@@ -137,6 +138,18 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
 
   const isTitle = currentSlide.type === 'title'
   const isInfo  = currentSlide.type === 'info'
+
+  const bottomBarNumerator =
+    images.length > 0
+      ? currentSlide.type === 'image'
+        ? currentSlide.imgIndex + 1
+        : lastImageIdx + 1
+      : 0
+
+  const bottomBarCaptionText =
+    currentSlide.type === 'image'
+      ? (images[currentSlide.imgIndex]?.caption ?? '')
+      : 'Project information'
 
   const infoFields = [
     { label: '(Location)',    value: project.location },
@@ -275,19 +288,6 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
                 draggable={false}
               />
             </div>
-            <div
-              style={{
-                position: 'absolute',
-                bottom: 0, left: 0, right: 0,
-                height: '58px',
-                display: 'flex',
-                alignItems: 'center',
-                paddingLeft: '20px',
-              }}
-            >
-              <span style={{ ...mono, color: '#000', width: '24px', flexShrink: 0 }}>{i + 1}</span>
-              <span style={{ ...serif, color: '#000', marginLeft: '40px' }}>{img.caption ?? ''}</span>
-            </div>
           </div>
         )
       })}
@@ -350,21 +350,6 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
             </div>
           </div>
         </div>
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 0, left: 0, right: 0,
-            height: '58px',
-            display: 'flex',
-            alignItems: 'center',
-            paddingLeft: '20px',
-          }}
-        >
-          {images.length > 0 && (
-            <span style={{ ...mono, color: '#000', width: '24px', flexShrink: 0 }}>{lastImageIdx + 1}</span>
-          )}
-          <span style={{ ...serif, color: '#000', marginLeft: '40px' }}>Project information</span>
-        </div>
       </div>
 
       {/* ── PERSISTENT BOTTOM BAR ── outside opacity wrappers; hidden on title slide */}
@@ -377,14 +362,26 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            paddingLeft: '44px',
+            paddingLeft: '20px',
             paddingRight: '20px',
             zIndex: 10,
           }}
         >
-          {images.length > 0 && (
-            <span style={{ ...mono, color: '#000' }}>/ {images.length}</span>
-          )}
+          <div style={{ display: 'flex', alignItems: 'baseline', minWidth: 0 }}>
+            {images.length > 0 && (
+              <span style={slideBarCounterStyle}>
+                {bottomBarNumerator} / {images.length}
+              </span>
+            )}
+            <span
+              style={{
+                ...slideBarCaptionStyle,
+                marginLeft: images.length > 0 ? '40px' : 0,
+              }}
+            >
+              {bottomBarCaptionText}
+            </span>
+          </div>
           {isInfo ? (
             <button onClick={goToLastImage} style={{ ...serif, ...btnReset, color: '#000' }}>
               (Back to images)

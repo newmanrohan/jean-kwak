@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { urlFor } from '@/lib/sanity'
 import { TRANSITION, TRANSITION_MS } from '@/lib/constants'
+import { slideBarCaptionStyle, slideBarCounterStyle } from '@/lib/slideBottomBarStyles'
 import TransitionLink from './TransitionLink'
 
 interface ProjectImage {
@@ -146,29 +147,10 @@ export default function ProjectSlider({ projects }: { projects: FeaturedProject[
         }}
       >
         <div style={{ display: 'flex', alignItems: 'baseline' }}>
-          <span
-            style={{
-              fontFamily: 'QuadrantTextMono',
-              fontWeight: 400,
-              fontSize: 'var(--font-label)',
-              letterSpacing: '0.03em',
-              lineHeight: '1.18',
-              color: '#000',
-            }}
-          >
+          <span style={slideBarCounterStyle}>
             {index + 1} / {projects.length}
           </span>
-          <span
-            style={{
-              fontFamily: 'QuadrantText',
-              fontWeight: 200,
-              fontSize: 'var(--font-body)',
-              color: '#000',
-              marginLeft: '40px',
-            }}
-          >
-            {project.title}
-          </span>
+          <span style={slideBarCaptionStyle}>{project.title}</span>
         </div>
         <TransitionLink
           href={`/${project.slug}`}
