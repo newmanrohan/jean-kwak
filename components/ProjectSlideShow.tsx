@@ -306,8 +306,8 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
         >
           <div className="flex flex-col lg:flex-row px-5 pb-8 pt-[99px]">
             {infoFields.length > 0 && (
-              <div className="shrink-0 mb-8 lg:mb-0 lg:w-[24%]">
-                <div className="grid grid-cols-[144px_1fr] gap-x-8">
+              <div className="shrink-0 mb-[40px] lg:mb-0 lg:w-[24%]">
+                <div className="grid grid-cols-[144px_1fr] gap-x-[40px]">
                   <div style={{ ...monoLabel, color: '#000' }}>
                     {infoFields.map(f => f.label).join('\n')}
                   </div>
@@ -318,11 +318,8 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
               </div>
             )}
             <div className="hidden lg:block shrink-0 lg:w-[27%]" />
-            <div className="flex-1 min-w-0 flex flex-col lg:flex-row">
-              <div
-                className="shrink-0 mb-4 lg:mb-0 lg:w-[22%]"
-                style={{ ...monoLabel, color: '#000' }}
-              >
+            <div className="flex-1 min-w-0 flex flex-col lg:flex-row gap-[40px]">
+              <div className="shrink-0 lg:w-[22%]" style={{ ...monoLabel, color: '#000' }}>
                 (about)
               </div>
               <div className="flex-1 min-w-0">

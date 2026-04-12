@@ -72,11 +72,8 @@ export default async function InformationPage() {
           <div className="flex-1 min-w-0">
 
             {/* Profile section: (profile) label LEFT of bio */}
-            <div className="flex flex-col lg:flex-row">
-              <div
-                className="shrink-0 mb-4 lg:mb-0 lg:w-[22%]"
-                style={mono}
-              >
+            <div className="flex flex-col lg:flex-row gap-[40px]">
+              <div className="shrink-0 lg:w-[22%]" style={mono}>
                 (profile)
               </div>
               <div className="flex-1 min-w-0">
@@ -107,15 +104,12 @@ export default async function InformationPage() {
 
             {/* Contact section: (contact) label LEFT of contact rows */}
             {contactRows.length > 0 && (
-              <div className="flex flex-col lg:flex-row" style={{ marginTop: '48px' }}>
-                <div
-                  className="shrink-0 mb-4 lg:mb-0 lg:w-[22%]"
-                  style={mono}
-                >
+              <div className="flex flex-col lg:flex-row gap-[40px]" style={{ marginTop: '48px' }}>
+                <div className="shrink-0 lg:w-[22%]" style={mono}>
                   (contact)
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="grid grid-cols-[144px_1fr] gap-x-8">
+                  <div className="grid grid-cols-[144px_1fr] gap-x-[40px]">
                     <div style={mono}>
                       {contactRows.map(r => r.label).join('\n')}
                     </div>
