@@ -164,7 +164,7 @@ export default function ProjectSlider({ projects }: { projects: FeaturedProject[
               fontWeight: 200,
               fontSize: 'var(--font-body)',
               color: '#000',
-              marginLeft: '80px',
+              marginLeft: '40px',
             }}
           >
             {project.title}
