@@ -286,7 +286,7 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
               }}
             >
               <span style={{ ...mono, color: '#000', width: '24px', flexShrink: 0 }}>{i + 1}</span>
-              <span style={{ ...serif, color: '#000', marginLeft: '80px' }}>{img.caption ?? ''}</span>
+              <span style={{ ...serif, color: '#000', marginLeft: '40px' }}>{img.caption ?? ''}</span>
             </div>
           </div>
         )
@@ -366,7 +366,7 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
           {images.length > 0 && (
             <span style={{ ...mono, color: '#000', width: '24px', flexShrink: 0 }}>{lastImageIdx + 1}</span>
           )}
-          <span style={{ ...serif, color: '#000', marginLeft: '80px' }}>Project information</span>
+          <span style={{ ...serif, color: '#000', marginLeft: '40px' }}>Project information</span>
         </div>
       </div>
 
