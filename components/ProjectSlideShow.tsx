@@ -217,7 +217,7 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
           top: '58px', left: 0,
           width: '50%',
           bottom: '58px',
-          cursor: 'pointer',
+          cursor: 'url(/arrow-left.svg) 7 16, pointer',
           zIndex: 5,
         }}
       />
@@ -228,7 +228,7 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
           top: '58px', right: 0,
           width: '50%',
           bottom: '58px',
-          cursor: 'pointer',
+          cursor: 'url(/arrow-right.svg) 25 16, pointer',
           zIndex: 5,
         }}
       />
