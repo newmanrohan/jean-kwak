@@ -10,11 +10,11 @@ export const slideBarCounterStyle: CSSProperties = {
   color: '#000',
 }
 
-/** Body caption to the right of the counter (40px gap applied on the caption span) */
+/** Body caption to the right of the counter (20px gap applied on the caption span) */
 export const slideBarCaptionStyle: CSSProperties = {
   fontFamily: 'QuadrantText',
   fontWeight: 200,
   fontSize: 'var(--font-body)',
   color: '#000',
-  marginLeft: '40px',
+  marginLeft: '20px',
 }

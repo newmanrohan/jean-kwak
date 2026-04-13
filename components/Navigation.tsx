@@ -23,7 +23,7 @@ export default function Navigation() {
         justifyContent: 'space-between',
         paddingLeft: '20px',
         paddingRight: '20px',
-        paddingTop: '7px',
+        paddingTop: '0px',
         height: '58px',
       }}
     >
@@ -55,7 +55,8 @@ export default function Navigation() {
             opacity: pathname === '/information' ? 0.45 : 1,
           }}
         >
-          Project Index,
+          <span className="hidden lg:inline">Project Index,</span>
+          <span className="lg:hidden">Index,</span>
         </TransitionLink>
         <TransitionLink
           href="/information"

@@ -30,6 +30,12 @@ export const project = defineType({
       type: 'number',
     }),
     defineField({
+      name: 'thumbnail',
+      title: 'Thumbnail',
+      type: 'image',
+      options: { hotspot: true },
+    }),
+    defineField({
       name: 'images',
       title: 'Images',
       type: 'array',

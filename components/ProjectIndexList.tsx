@@ -10,6 +10,8 @@ interface Project {
   title: string
   slug: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  thumbnail?: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   firstImage?: any
 }
 
@@ -26,8 +28,11 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
     if (el) {
       setImageTop(el.getBoundingClientRect().top)
     }
-    if (projects[i]?.firstImage) {
-      setDisplayUrl(urlFor(projects[i].firstImage).width(300).url())
+    const img = projects[i]?.thumbnail ?? projects[i]?.firstImage
+    if (img) {
+      setDisplayUrl(urlFor(img).width(720).url())
+    } else {
+      setDisplayUrl(null)
     }
   }
 
@@ -42,7 +47,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
           position: 'fixed',
           top: imageTop,
           right: '20px',
-          width: '294px',
+          width: '353px',
           opacity: hovered !== null ? 1 : 0,
           transition: `opacity ${TRANSITION}`,
           pointerEvents: 'none',
@@ -56,7 +61,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
             style={{
               width: '100%',
               display: 'block',
-              maxHeight: '393px',
+              maxHeight: '472px',
               objectFit: 'contain',
             }}
           />
@@ -74,7 +79,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
           fontSize: 'var(--font-label)',
           letterSpacing: '0.03em',
           textTransform: 'uppercase',
-          lineHeight: '1.18',
+          lineHeight: '1.416',
           color: '#000',
         }}
       >
@@ -98,9 +103,9 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
             href={`/${project.slug}`}
             style={{ textDecoration: 'none' }}
           >
-            {project.firstImage && (
+            {(project.thumbnail ?? project.firstImage) && (
               <img
-                src={urlFor(project.firstImage).width(600).url()}
+                src={urlFor(project.thumbnail ?? project.firstImage).width(600).url()}
                 alt={project.title}
                 style={{ width: '100%', display: 'block' }}
               />
@@ -143,7 +148,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
                 fontWeight: 400,
                 fontSize: 'var(--font-label)',
                 letterSpacing: '0.03em',
-                lineHeight: '1.18',
+                lineHeight: '1.416',
                 color: '#2B2B2B',
                 width: '37px',
                 flexShrink: 0,

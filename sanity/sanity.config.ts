@@ -10,7 +10,28 @@ export default defineConfig({
   projectId: 'cmh6jr2o',
   dataset: 'production',
 
-  plugins: [structureTool(), visionTool()],
+  plugins: [
+    structureTool({
+      structure: (S) =>
+        S.list()
+          .title('Content')
+          .items([
+            S.listItem()
+              .title('Home Slider')
+              .id('homeSlider')
+              .child(
+                S.document()
+                  .schemaType('homeSlider')
+                  .documentId('homeSlider')
+              ),
+            S.divider(),
+            ...S.documentTypeListItems().filter(
+              (item) => item.getId() !== 'homeSlider'
+            ),
+          ]),
+    }),
+    visionTool(),
+  ],
 
   schema: {
     types: schemaTypes,

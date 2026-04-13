@@ -2,8 +2,9 @@
 
 :root {
   --transition: 500ms ease-in-out;
-  --font-body: clamp(12px, 10px + 0.556vw, 18px);
-  --font-label: clamp(10px, 8.67px + 0.370vw, 14px);
+  --font-body: clamp(14px, 10px + 0.556vw, 18px);
+  --font-label: clamp(12px, 8.67px + 0.370vw, 14px);
+  --lh-body-mobile: 1.4em;
 }
 
 @font-face {
@@ -38,6 +39,7 @@ body {
   font-family: 'QuadrantText', serif;
   font-weight: 200;
   font-size: var(--font-body);
-  line-height: 1.28;
+  line-height: var(--lh-body-mobile);
   -webkit-font-smoothing: antialiased;
 }
+

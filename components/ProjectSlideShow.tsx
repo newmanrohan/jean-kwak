@@ -48,7 +48,7 @@ const mono: React.CSSProperties = {
   fontWeight: 400,
   fontSize: 'var(--font-label)',
   letterSpacing: '0.03em',
-  lineHeight: '1.18',
+  lineHeight: '1.416',
 }
 
 const monoLabel: React.CSSProperties = {
@@ -304,21 +304,21 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
             overflowY: 'auto',
           }}
         >
-          <div className="flex flex-col lg:flex-row px-5 pb-8 pt-[99px]">
+          <div className="flex flex-col lg:flex-row px-5 pb-8 lg:pt-[99px]">
             {infoFields.length > 0 && (
-              <div className="shrink-0 mb-[40px] lg:mb-0 lg:w-[24%]">
-                <div className="grid grid-cols-[144px_1fr] gap-x-[40px]">
+              <div className="shrink-0 mb-16 lg:mb-0 lg:w-[24%]">
+                <div className="grid grid-cols-[144px_max-content] gap-x-5 lg:gap-x-[40px]">
                   <div style={{ ...monoLabel, color: '#000' }}>
                     {infoFields.map(f => f.label).join('\n')}
                   </div>
-                  <div style={{ ...monoLabel, color: '#000' }}>
+                  <div style={{ ...monoLabel, color: '#000', whiteSpace: 'pre' }}>
                     {infoFields.map(f => f.value!).join('\n')}
                   </div>
                 </div>
               </div>
             )}
             <div className="hidden lg:block shrink-0 lg:w-[27%]" />
-            <div className="flex-1 min-w-0 flex flex-col lg:flex-row gap-[40px]">
+            <div className="flex-1 min-w-0 flex flex-col lg:flex-row gap-4 lg:gap-[40px]">
               <div className="shrink-0 lg:w-[22%]" style={{ ...monoLabel, color: '#000' }}>
                 (about)
               </div>
@@ -328,7 +328,7 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
                     fontFamily: 'QuadrantText',
                     fontWeight: 200,
                     fontSize: 'var(--font-body)',
-                    lineHeight: '1.278',
+                    lineHeight: 'var(--lh-body-mobile)',
                     color: '#141414',
                   }}
                 >
@@ -376,7 +376,7 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
             <span
               style={{
                 ...slideBarCaptionStyle,
-                marginLeft: images.length > 0 ? '40px' : 0,
+                marginLeft: images.length > 0 ? '20px' : 0,
               }}
             >
               {bottomBarCaptionText}

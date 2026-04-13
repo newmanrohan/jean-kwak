@@ -18,7 +18,7 @@ const mono: React.CSSProperties = {
   fontSize: 'var(--font-label)',
   letterSpacing: '0.03em',
   textTransform: 'uppercase',
-  lineHeight: '1.18',
+  lineHeight: '1.416',
   color: '#000',
   whiteSpace: 'pre-line',
 }
@@ -53,7 +53,7 @@ export default async function InformationPage() {
 
           {/* Portrait */}
           {portraitUrl && (
-            <div className="shrink-0 mb-10 lg:mb-0 lg:w-[24%]">
+            <div className="shrink-0 mb-10 mx-auto lg:mx-0 lg:mb-0 lg:w-[24%]">
               <img
                 src={portraitUrl}
                 alt="Portrait"
@@ -82,7 +82,7 @@ export default async function InformationPage() {
                     fontFamily: 'QuadrantText',
                     fontWeight: 200,
                     fontSize: 'var(--font-body)',
-                    lineHeight: '1.278',
+                    lineHeight: 'var(--lh-body-mobile)',
                     color: '#141414',
                   }}
                 >
@@ -122,8 +122,11 @@ export default async function InformationPage() {
             )}
 
             {/* Footer */}
-            <div className="lg:ml-[22%]" style={{ ...mono, marginTop: '48px' }}>
-              {'ACT Architects Registration No 2752\nJean Architects © All rights reserved 2023'}
+            <div className="flex flex-col lg:flex-row gap-[40px]" style={{ marginTop: '48px' }}>
+              <div className="hidden lg:block shrink-0 lg:w-[22%]" />
+              <div style={mono}>
+                {'ACT Architects Registration No 2752\nJean Architects © All rights reserved 2023'}
+              </div>
             </div>
           </div>
         </div>
