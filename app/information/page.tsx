@@ -109,7 +109,7 @@ export default async function InformationPage() {
                   (contact)
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="grid grid-cols-[144px_1fr] gap-x-[40px]">
+                  <div className="grid grid-cols-[max-content_1fr] gap-x-[40px]">
                     <div style={mono}>
                       {contactRows.map(r => r.label).join('\n')}
                     </div>
