@@ -1,5 +1,6 @@
 import { client, homeSliderQuery } from '@/lib/sanity'
 import ProjectSlider from '@/components/ProjectSlider'
+import IntroOverlay from '@/components/IntroOverlay'
 
 export const dynamic = 'force-dynamic'
 
@@ -29,6 +30,7 @@ export default async function HomePage() {
   return (
     <main className="h-full">
       <ProjectSlider projects={projects} />
+      <IntroOverlay />
     </main>
   )
 }

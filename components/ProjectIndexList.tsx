@@ -68,12 +68,12 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
         )}
       </div>
 
-      {/* (index) label — fixed below nav */}
+      {/* Mobile: (INDEX) label */}
       <div
+        className="lg:hidden"
         style={{
-          position: 'fixed',
-          top: '157px',
-          left: '20px',
+          paddingLeft: '20px',
+          paddingTop: '32px',
           fontFamily: 'QuadrantTextMono',
           fontWeight: 400,
           fontSize: 'var(--font-label)',
@@ -83,7 +83,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
           color: '#000',
         }}
       >
-        (index)
+        (INDEX)
       </div>
 
       {/* Mobile: 2-column image grid */}
@@ -92,9 +92,10 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
         style={{
           paddingLeft: '20px',
           paddingRight: '20px',
-          paddingTop: '32px',
+          paddingTop: '20px',
           gridTemplateColumns: '1fr 1fr',
-          gap: '15px',
+          columnGap: '15px',
+          rowGap: '40px',
         }}
       >
         {projects.map((project) => (
@@ -127,7 +128,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
       </div>
 
       {/* Desktop: list with hover interaction */}
-      <div className="hidden lg:block" style={{ marginLeft: '196px' }}>
+      <div className="hidden lg:block" style={{ paddingLeft: '20px' }}>
         {projects.map((project, i) => (
           <div
             key={project._id}
@@ -142,6 +143,20 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
             onMouseEnter={() => handleMouseEnter(i)}
             onMouseLeave={handleMouseLeave}
           >
+            <span
+              style={{
+                fontFamily: 'QuadrantTextMono',
+                fontWeight: 400,
+                fontSize: 'var(--font-label)',
+                letterSpacing: '0.03em',
+                lineHeight: '1.416',
+                color: '#000',
+                width: '176px',
+                flexShrink: 0,
+              }}
+            >
+              {i === 0 ? '(INDEX)' : ''}
+            </span>
             <span
               style={{
                 fontFamily: 'QuadrantTextMono',

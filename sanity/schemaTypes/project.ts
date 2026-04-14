@@ -19,17 +19,6 @@ export const project = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'featured',
-      title: 'Show on Homepage',
-      type: 'boolean',
-      initialValue: false,
-    }),
-    defineField({
-      name: 'featuredOrder',
-      title: 'Featured Order',
-      type: 'number',
-    }),
-    defineField({
       name: 'thumbnail',
       title: 'Thumbnail',
       type: 'image',
@@ -64,12 +53,5 @@ export const project = defineType({
       type: 'array',
       of: [{ type: 'block' }],
     }),
-  ],
-  orderings: [
-    {
-      title: 'Featured Order',
-      name: 'featuredOrderAsc',
-      by: [{ field: 'featuredOrder', direction: 'asc' }],
-    },
   ],
 })

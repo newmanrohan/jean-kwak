@@ -27,17 +27,6 @@ export const allProjectsQuery = groq`
   }
 `
 
-export const featuredProjectsQuery = groq`
-  *[_type == "project" && featured == true] | order(featuredOrder asc) {
-    _id,
-    title,
-    "slug": slug.current,
-    images[] {
-      caption,
-      image
-    }
-  }
-`
 
 export const projectBySlugQuery = groq`
   *[_type == "project" && slug.current == $slug][0] {

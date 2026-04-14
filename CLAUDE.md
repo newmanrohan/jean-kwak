@@ -34,9 +34,20 @@ Read this before writing any code.
 - Information page: fluid multi-column, stacks on mobile
 
 ## Sanity Schema
-- `project` type has: `title`, `slug`, `description`, `images` (array with `asset`, `caption`, `orientation: landscape|portrait`), `location`, `year`, `builder`, `photography`, `landscape`, `styling`, `showOnHomepage`, `homepageOrder`
+- `project` type has: `title`, `slug`, `description`, `images` (array with `asset`, `caption`, `orientation: landscape|portrait`), `location`, `year`, `builder`, `photography`, `landscape`, `styling`
 - Landscape images: `object-cover`. Portrait images: `object-contain`
 - Queries in `lib/sanity.ts`
+
+## Deployment
+
+Every time you change the Sanity schema, TWO deploys are required:
+
+1. `git push` → Vercel rebuilds the website (automatic)
+2. `npx sanity deploy` → updates the client's Sanity Studio at sanity.io
+
+**Never skip step 2.** The client manages content through the hosted studio. If you change the schema without deploying, their studio will be out of sync — missing fields, outdated structure.
+
+Run `npx sanity deploy` from the project root after any schema change.
 
 ## Key Rules
 - Never use fixed pixel widths for layout — use percentages, flex, grid
