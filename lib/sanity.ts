@@ -18,7 +18,7 @@ export function urlFor(source: SanityImageSource) {
 // Queries
 
 export const allProjectsQuery = groq`
-  *[_type == "project"] | order(title asc) {
+  *[_type == "project"] | order(indexOrder asc, title asc) {
     _id,
     title,
     "slug": slug.current,

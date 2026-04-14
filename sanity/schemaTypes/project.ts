@@ -19,6 +19,11 @@ export const project = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'indexOrder',
+      title: 'Order on Index Page',
+      type: 'number',
+    }),
+    defineField({
       name: 'thumbnail',
       title: 'Thumbnail',
       type: 'image',

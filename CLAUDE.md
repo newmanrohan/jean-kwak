@@ -34,7 +34,7 @@ Read this before writing any code.
 - Information page: fluid multi-column, stacks on mobile
 
 ## Sanity Schema
-- `project` type has: `title`, `slug`, `description`, `images` (array with `asset`, `caption`, `orientation: landscape|portrait`), `location`, `year`, `builder`, `photography`, `landscape`, `styling`
+- `project` type has: `title`, `slug`, `description`, `images` (array with `asset`, `caption`, `orientation: landscape|portrait`), `location`, `year`, `builder`, `photography`, `landscape`, `styling`, `indexOrder`
 - Landscape images: `object-cover`. Portrait images: `object-contain`
 - Queries in `lib/sanity.ts`
 
