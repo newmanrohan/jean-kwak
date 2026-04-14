@@ -51,12 +51,15 @@ export default function ProjectSlider({ projects }: { projects: FeaturedProject[
     return () => window.removeEventListener('keydown', onKey)
   }, [projects.length, goToIndex])
 
-  // Auto-advance every 3 seconds
+  // Auto-advance every 3 seconds, delayed to start after the intro overlay finishes (2500ms)
   useEffect(() => {
-    const timer = setInterval(() => {
-      goToIndex((indexRef.current + 1) % projects.length)
-    }, 3000)
-    return () => clearInterval(timer)
+    let interval: ReturnType<typeof setInterval>
+    const delay = setTimeout(() => {
+      interval = setInterval(() => {
+        goToIndex((indexRef.current + 1) % projects.length)
+      }, 3000)
+    }, 2500)
+    return () => { clearTimeout(delay); clearInterval(interval) }
   }, [projects.length, goToIndex])
 
   if (!projects.length) return null
