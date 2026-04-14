@@ -51,6 +51,14 @@ export default function ProjectSlider({ projects }: { projects: FeaturedProject[
     return () => window.removeEventListener('keydown', onKey)
   }, [projects.length, goToIndex])
 
+  // Auto-advance every 3 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      goToIndex((indexRef.current + 1) % projects.length)
+    }, 3000)
+    return () => clearInterval(timer)
+  }, [projects.length, goToIndex])
+
   if (!projects.length) return null
 
   const project = projects[index]
