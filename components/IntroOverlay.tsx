@@ -30,10 +30,7 @@ export default function IntroOverlay() {
         alignItems: 'center',
         justifyContent: 'center',
         opacity: phase === 'fading' ? 0 : 1,
-        animation: phase === 'visible' ? FADE_ANIMATION : undefined,
-        transition: phase === 'fading'
-          ? `opacity ${TRANSITION_MS}ms ease-in-out`
-          : undefined,
+        transition: phase === 'fading' ? `opacity ${TRANSITION_MS}ms ease-in-out` : undefined,
       }}
     >
       <h1
@@ -46,6 +43,7 @@ export default function IntroOverlay() {
           textAlign: 'center',
           maxWidth: '90%',
           margin: 0,
+          animation: phase === 'visible' ? 'fadein 1500ms ease-in-out' : undefined,
         }}
       >
         Jean Kwak Architects
