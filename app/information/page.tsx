@@ -73,7 +73,7 @@ export default async function InformationPage() {
 
             {/* Profile section: (profile) label LEFT of bio */}
             <div className="flex flex-col lg:flex-row">
-              <div className="shrink-0 lg:w-[22%] mb-[20px] lg:mb-0 lg:mr-[40px]" style={mono}>
+              <div className="shrink-0 lg:w-[144px] mb-[20px] lg:mb-0 lg:mr-[40px]" style={mono}>
                 (profile)
               </div>
               <div className="flex-1 min-w-0">
@@ -105,7 +105,7 @@ export default async function InformationPage() {
             {/* Contact section: (contact) label LEFT of contact rows */}
             {contactRows.length > 0 && (
               <div className="flex flex-col lg:flex-row" style={{ marginTop: '20px' }}>
-                <div className="shrink-0 lg:w-[22%] mb-[20px] lg:mb-0 lg:mr-[40px]" style={mono}>
+                <div className="shrink-0 lg:w-[144px] mb-[20px] lg:mb-0 lg:mr-[40px]" style={mono}>
                   (contact)
                 </div>
                 <div className="flex-1 min-w-0">
@@ -123,7 +123,7 @@ export default async function InformationPage() {
 
             {/* Footer */}
             <div className="flex flex-col lg:flex-row mt-10 lg:mt-[60px]">
-              <div className="hidden lg:block shrink-0 lg:w-[22%] lg:mr-[40px]" />
+              <div className="hidden lg:block shrink-0 lg:w-[144px] lg:mr-[40px]" />
               <div style={mono}>
                 {'ACT Architects Registration No 2752\nJean Architects © All rights reserved 2023'}
               </div>

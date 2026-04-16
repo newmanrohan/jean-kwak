@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Navigation from '@/components/Navigation'
 import SiteTransition from '@/components/SiteTransition'
+import { GridOverlay } from '@/components/GridOverlay'
 
 export const metadata: Metadata = {
   title: 'Jean Kwak Architects',
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteTransition navigation={<Navigation />}>
           {children}
         </SiteTransition>
+        <GridOverlay />
       </body>
     </html>
   )

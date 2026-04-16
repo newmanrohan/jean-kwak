@@ -319,7 +319,7 @@ export default function ProjectSlideShow({ project, projectNumber }: Props) {
             )}
             <div className="hidden lg:block shrink-0 lg:w-[27%]" />
             <div className="flex-1 min-w-0 flex flex-col lg:flex-row gap-5 lg:gap-[40px]">
-              <div className="shrink-0 lg:w-[22%]" style={{ ...monoLabel, color: '#000' }}>
+              <div className="shrink-0 lg:w-[144px]" style={{ ...monoLabel, color: '#000' }}>
                 (about)
               </div>
               <div className="flex-1 min-w-0">
