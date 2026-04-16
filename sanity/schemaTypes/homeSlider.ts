@@ -37,4 +37,9 @@ export const homeSlider = defineType({
       validation: (Rule) => Rule.min(4).max(10),
     }),
   ],
+  preview: {
+    prepare() {
+      return { title: 'Home Slider' }
+    },
+  },
 })
