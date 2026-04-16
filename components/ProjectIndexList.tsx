@@ -19,15 +19,10 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
   const [hovered, setHovered] = useState<number | null>(null)
   // Persists the last URL so the image doesn't blank during fade-out
   const [displayUrl, setDisplayUrl] = useState<string | null>(null)
-  const [imageTop, setImageTop] = useState(0)
   const rowRefs = useRef<(HTMLDivElement | null)[]>([])
 
   const handleMouseEnter = (i: number) => {
     setHovered(i)
-    const el = rowRefs.current[i]
-    if (el) {
-      setImageTop(el.getBoundingClientRect().top)
-    }
     const img = projects[i]?.thumbnail ?? projects[i]?.firstImage
     if (img) {
       setDisplayUrl(urlFor(img).width(720).url())
@@ -45,7 +40,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
         className="hidden lg:block"
         style={{
           position: 'fixed',
-          top: imageTop,
+          top: '157px',
           right: '20px',
           width: '353px',
           opacity: hovered !== null ? 1 : 0,
