@@ -25,7 +25,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
     setHovered(i)
     const img = projects[i]?.thumbnail ?? projects[i]?.firstImage
     if (img) {
-      setDisplayUrl(urlFor(img).width(720).url())
+      setDisplayUrl(urlFor(img).width(880).url())
     } else {
       setDisplayUrl(null)
     }
@@ -42,7 +42,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
           position: 'fixed',
           top: '157px',
           right: '20px',
-          width: '353px',
+          width: '440px',
           opacity: hovered !== null ? 1 : 0,
           transition: `opacity ${TRANSITION}`,
           pointerEvents: 'none',
@@ -56,7 +56,7 @@ export default function ProjectIndexList({ projects }: { projects: Project[] }) 
             style={{
               width: '100%',
               display: 'block',
-              maxHeight: '472px',
+              maxHeight: '588px',
               objectFit: 'contain',
             }}
           />

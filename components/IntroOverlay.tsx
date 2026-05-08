@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { TRANSITION_MS, FADE_ANIMATION } from '@/lib/constants'
 
 type Phase = 'visible' | 'fading' | 'gone'
@@ -10,25 +10,37 @@ const TOTAL_MS   = DISPLAY_MS + TRANSITION_MS  // 2500
 
 export default function IntroOverlay() {
   const [phase, setPhase] = useState<Phase>('visible')
+  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([])
 
   useEffect(() => {
-    const fadeTimer = setTimeout(() => setPhase('fading'), DISPLAY_MS)
-    const doneTimer = setTimeout(() => setPhase('gone'),   TOTAL_MS)
-    return () => { clearTimeout(fadeTimer); clearTimeout(doneTimer) }
+    timersRef.current.push(setTimeout(() => setPhase('fading'), DISPLAY_MS))
+    timersRef.current.push(setTimeout(() => setPhase('gone'),   TOTAL_MS))
+    return () => { timersRef.current.forEach(clearTimeout) }
   }, [])
+
+  const dismiss = () => {
+    if (phase !== 'visible') return
+    timersRef.current.forEach(clearTimeout)
+    setPhase('fading')
+    timersRef.current.push(setTimeout(() => setPhase('gone'), TRANSITION_MS))
+  }
 
   if (phase === 'gone') return null
 
   return (
     <div
+      onClick={dismiss}
       style={{
         position: 'fixed',
         inset: 0,
         zIndex: 100,
         background: '#E8D9C4',
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
+        gap: '20px',
+        cursor: 'pointer',
         opacity: phase === 'fading' ? 0 : 1,
         transition: phase === 'fading' ? `opacity ${TRANSITION_MS}ms ease-in-out` : undefined,
       }}
@@ -48,6 +60,19 @@ export default function IntroOverlay() {
       >
         Jean Kwak Architects
       </h1>
+      <span
+        style={{
+          fontFamily: 'QuadrantTextMono',
+          fontWeight: 400,
+          fontSize: 'var(--font-label)',
+          letterSpacing: '0.03em',
+          textTransform: 'uppercase',
+          color: '#2B2B2B',
+          animation: phase === 'visible' ? 'fadein 1500ms ease-in-out' : undefined,
+        }}
+      >
+        (Click to enter)
+      </span>
     </div>
   )
 }
