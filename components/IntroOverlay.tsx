@@ -36,10 +36,8 @@ export default function IntroOverlay() {
         zIndex: 100,
         background: '#E8D9C4',
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '20px',
         cursor: 'pointer',
         opacity: phase === 'fading' ? 0 : 1,
         transition: phase === 'fading' ? `opacity ${TRANSITION_MS}ms ease-in-out` : undefined,
@@ -60,19 +58,6 @@ export default function IntroOverlay() {
       >
         Jean Kwak Architects
       </h1>
-      <span
-        style={{
-          fontFamily: 'QuadrantTextMono',
-          fontWeight: 400,
-          fontSize: 'var(--font-label)',
-          letterSpacing: '0.03em',
-          textTransform: 'uppercase',
-          color: '#2B2B2B',
-          animation: phase === 'visible' ? 'fadein 1500ms ease-in-out' : undefined,
-        }}
-      >
-        (Click to enter)
-      </span>
     </div>
   )
 }
